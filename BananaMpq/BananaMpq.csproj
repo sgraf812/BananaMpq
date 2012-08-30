@@ -94,9 +94,11 @@
     <Compile Include="Layer\WdtRelated\MainChunk.cs" />
     <Compile Include="Layer\WdtRelated\MphdChunk.cs" />
     <Compile Include="Layer\Wmo.cs" />
+    <Compile Include="Layer\WmoRelated\DoodadSet.cs" />
     <Compile Include="Layer\WmoRelated\LiquidTypeClass.cs" />
     <Compile Include="Layer\WmoRelated\MliqChunk.cs" />
     <Compile Include="Layer\WmoRelated\ModdChunk.cs" />
+    <Compile Include="Layer\WmoRelated\ModsChunk.cs" />
     <Compile Include="Layer\WmoRelated\MogpChunk.cs" />
     <Compile Include="Layer\WmoRelated\MohdChunk.cs" />
     <Compile Include="Layer\WmoRelated\MopyChunk.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Layer\WmoRelated\WmoGroup.cs" />
     <Compile Include="Layer\WmoRelated\WmoVersionException.cs" />
     <Compile Include="MathUtil.cs" />
+    <Compile Include="MiscUtils.cs" />
     <Compile Include="MpqFilePaths.cs" />
     <Compile Include="Layer\Wdt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

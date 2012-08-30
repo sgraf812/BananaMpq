@@ -6,7 +6,7 @@ namespace BananaMpq.Geometry.Builders
 {
     public class DoodadBuilder : ModelBuilder
     {
-        private readonly ISet<int> _builtIds = new SortedSet<int>(); 
+        private readonly ISet<int> _builtIds = new HashSet<int>(); 
 
         public DoodadBuilder(FilePool files) : base(files)
         {

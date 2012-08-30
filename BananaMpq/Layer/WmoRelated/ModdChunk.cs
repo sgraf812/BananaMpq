@@ -29,6 +29,7 @@ namespace BananaMpq.Layer.WmoRelated
             }
         }
 
+        // ReSharper disable FieldCanBeMadeReadOnly.Local
         [StructLayout(LayoutKind.Sequential, Size = 0x28)]
         private struct Modd
         {
@@ -37,5 +38,6 @@ namespace BananaMpq.Layer.WmoRelated
             public Quaternion rotation;
             public float scale;
         }
+        // ReSharper restore FieldCanBeMadeReadOnly.Local
     }
 }

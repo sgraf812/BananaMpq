@@ -10,7 +10,7 @@ namespace BananaMpq.Geometry.Builders
 {
     public class WmoBuilder : ModelBuilder
     {
-        private readonly ISet<int> _builtIds = new SortedSet<int>(); 
+        private readonly ISet<int> _builtIds = new HashSet<int>();
         private readonly DoodadBuilder _doodadBuilder;
         private readonly Func<int, MaterialFlags> _getLiquidMaterial;
 
@@ -31,7 +31,10 @@ namespace BananaMpq.Geometry.Builders
                 var wmo = Files.GetWmo(definition.GetModelReference(references));
                 var transform = definition.GetTranform();
 
-                doodads = doodads.Concat(_doodadBuilder.BuildDoodads(wmo.DoodadDefinitions, wmo.DoodadReferences, bounds, transform));
+                doodads = doodads.Concat(from set in wmo.DoodadSets
+                                         let defs = wmo.DoodadDefinitions.Skip(set.FirstDefinition).Take(set.DefinitionCount)
+                                         from d in _doodadBuilder.BuildDoodads(defs, wmo.DoodadReferences, bounds, transform)
+                                         select d);
 
                 groups = groups.Concat(from g in wmo.Groups
                                        let collisionTriangles =
@@ -44,11 +47,11 @@ namespace BananaMpq.Geometry.Builders
                 liquids = liquids.Concat(from g in wmo.Groups
                                          where g.Liquid != null
                                          let l = g.Liquid
-                                         let meshBuilder =
-                                             new SquareMeshBuilder(l.HeightMap, new Vector3(l.Position.X, l.Position.Y, 0.0f),
+                                         let meshBuilder = new SquareMeshBuilder(l.HeightMap, new Vector3(l.Position.X, l.Position.Y, 0.0f),
                                              MapChunk.TileSize, transform)
                                          let materialProperties = _getLiquidMaterial(g.DetermineLiquidType())
-                                         select meshBuilder.BuildSquareMesh((c, r) => !l.ExistsTable[r, c], materialProperties, bounds) into sceneObject
+                                         select meshBuilder.BuildSquareMesh((c, r) => !l.ExistsTable[r, c], materialProperties, bounds)
+                                         into sceneObject
                                          where sceneObject != null
                                          select sceneObject);
             }

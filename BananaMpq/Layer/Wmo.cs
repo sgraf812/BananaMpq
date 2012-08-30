@@ -14,6 +14,7 @@ namespace BananaMpq.Layer
         private MohdChunk _mohd;
 
         public IList<WmoGroup> Groups { get; private set; }
+        public IList<DoodadSet> DoodadSets { get; private set; }
         public IList<StringReference> DoodadReferences { get; private set; } 
         public IList<IModelDefinition> DoodadDefinitions { get; private set; } 
 
@@ -35,6 +36,8 @@ namespace BananaMpq.Layer
                     return HandleMver(header);
                 case "MOHD":
                     return _mohd = new MohdChunk(header);
+                case "MODS":
+                    return HandleMods(header);
                 case "MODN":
                     return HandleModn(header);
                 case "MODD":
@@ -42,6 +45,13 @@ namespace BananaMpq.Layer
                 default:
                     return new Chunk(header);
             }
+        }
+
+        private unsafe Chunk HandleMods(ChunkHeader* header)
+        {
+            var mods = new ModsChunk(header);
+            DoodadSets = mods.DoodadSets;
+            return mods;
         }
 
         private unsafe Chunk HandleModn(ChunkHeader* header)
@@ -82,6 +92,7 @@ namespace BananaMpq.Layer
                 return new[]
                 {
                     t.GetProperty("Groups"),
+                    t.GetProperty("DoodadSets"),
                     t.GetProperty("DoodadReferences"),
                     t.GetProperty("DoodadDefinitions"),
                 };
