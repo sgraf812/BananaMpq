@@ -84,13 +84,13 @@
     <Compile Include="Layer\Chunks\ChunkMagicException.cs" />
     <Compile Include="Layer\Chunks\ChunkValidationException.cs" />
     <Compile Include="Layer\Chunks\IModelDefinition.cs" />
+    <Compile Include="Layer\Chunks\ModelDefinition.cs" />
     <Compile Include="Layer\Chunks\ModelDefinitionChunk.cs" />
     <Compile Include="Layer\Chunks\MverChunk.cs" />
     <Compile Include="Layer\Chunks\OffsetChunk.cs" />
     <Compile Include="Layer\Chunks\StringReference.cs" />
     <Compile Include="Layer\Chunks\StringReferenceChunk.cs" />
     <Compile Include="Layer\M2Bounds.cs" />
-    <Compile Include="Layer\ModelDefinition.cs" />
     <Compile Include="Layer\WdtRelated\MainChunk.cs" />
     <Compile Include="Layer\WdtRelated\MphdChunk.cs" />
     <Compile Include="Layer\Wmo.cs" />

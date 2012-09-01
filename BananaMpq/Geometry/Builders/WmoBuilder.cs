@@ -31,9 +31,8 @@ namespace BananaMpq.Geometry.Builders
                 var wmo = Files.GetWmo(definition.GetModelReference(references));
                 var transform = definition.GetTranform();
 
-                doodads = doodads.Concat(from set in wmo.DoodadSets
-                                         let defs = wmo.DoodadDefinitions.Skip(set.FirstDefinition).Take(set.DefinitionCount)
-                                         from d in _doodadBuilder.BuildDoodads(defs, wmo.DoodadReferences, bounds, transform)
+                var doodadDefs = definition.FilterDoodadSetDefinitions(wmo.DoodadSets, wmo.DoodadDefinitions);
+                doodads = doodads.Concat(from d in _doodadBuilder.BuildDoodads(doodadDefs, wmo.DoodadReferences, bounds, transform)
                                          select d);
 
                 groups = groups.Concat(from g in wmo.Groups
@@ -51,9 +50,9 @@ namespace BananaMpq.Geometry.Builders
                                              MapChunk.TileSize, transform)
                                          let materialProperties = _getLiquidMaterial(g.DetermineLiquidType())
                                          select meshBuilder.BuildSquareMesh((c, r) => !l.ExistsTable[r, c], materialProperties, bounds)
-                                         into sceneObject
-                                         where sceneObject != null
-                                         select sceneObject);
+                                             into sceneObject
+                                             where sceneObject != null
+                                             select sceneObject);
             }
 
             return new WmoBuildResults
