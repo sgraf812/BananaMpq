@@ -14,7 +14,7 @@ namespace BananaMpq.View.Infrastructure
         public MpqFileReader()
         {
             var languagePack = Installation.LanguagePacks.FirstOrDefault(l => l.Culture.Equals(CultureInfo.CurrentUICulture))
-                ?? Installation.LanguagePacks.First(l => l.Culture.Name == "en-GB")
+                ?? Installation.LanguagePacks.FirstOrDefault(l => l.Culture.Name == "en-GB")
                 ?? Installation.LanguagePacks.First(); 
             _fileSystem = Installation.CreateFileSystem(languagePack, false);
         }
