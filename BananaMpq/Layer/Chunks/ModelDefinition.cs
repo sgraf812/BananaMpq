@@ -12,18 +12,23 @@ namespace BananaMpq.Layer.Chunks
         public int? Id { get; set; }
         public Vector3 Position { get; set; }
         public float Scale { get; set; }
-        public int? UsedDoodadSetIndex { private get; set; }
+        public int? ExtraDoodadSetIndex { private get; set; }
 
         protected abstract Matrix RotationMatrix { get; }
         public abstract string GetModelReference(IList<StringReference> references);
 
         public IEnumerable<IModelDefinition> FilterDoodadSetDefinitions(IList<DoodadSet> sets, IEnumerable<IModelDefinition> doodadDefs)
         {
-            if (!UsedDoodadSetIndex.HasValue) return new IModelDefinition[0];
-            var first = sets[UsedDoodadSetIndex.Value].FirstDefinition;
-            var count = sets[UsedDoodadSetIndex.Value].DefinitionCount;
-            return doodadDefs.Skip(first).Take(count);
+            var defs = DefinitionsForSet(doodadDefs, sets[0]);
+            return !ExtraDoodadSetIndex.HasValue
+                       ? defs
+                       : defs.Concat(DefinitionsForSet(doodadDefs, sets[ExtraDoodadSetIndex.Value]));
         }
+
+        private static IEnumerable<IModelDefinition> DefinitionsForSet(IEnumerable<IModelDefinition> defs, DoodadSet set)
+        {
+            return defs.Skip(set.FirstDefinition).Take(set.DefinitionCount);
+        } 
 
         public Matrix GetTranform()
         {
@@ -40,7 +45,7 @@ namespace BananaMpq.Layer.Chunks
                     t.GetProperty("Id"),
                     t.GetProperty("Position"),
                     t.GetProperty("Scale"),
-                    t.GetProperty("UsedDoodadSetIndex"),
+                    t.GetProperty("ExtraDoodadSetIndex"),
                 };
             }
         }

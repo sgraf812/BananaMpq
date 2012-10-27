@@ -25,7 +25,7 @@ namespace BananaMpq.Layer.AdtRelated
                     ),
                     Rotation = entry->rotation,
                     Scale = 1.0f,
-                    UsedDoodadSetIndex = entry->doodadSet
+                    ExtraDoodadSetIndex = entry->doodadSet
                 });
             }
         }
