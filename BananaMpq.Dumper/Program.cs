@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using BananaMpq.Geometry;
 using BananaMpq.Geometry.Builders;
 using BananaMpq.Layer.WmoRelated;
@@ -23,7 +19,6 @@ namespace BananaMpq.Dumper
         private static readonly FilePool Files = new FilePool(FileReader);
         private static readonly AdtGeometryBuilder Builder = new AdtGeometryBuilder(Files, MapLiquidType);
         private static readonly KeyedClientDatabase<int, LiquidTypeRecord> LiquidTypeDatabase = InitializeLiquidTypeDb();
-        private static readonly Regex adtFormat = new Regex(@"(?<continent>\w+)\s*\(\s*(?<x>\d{1,2})\s*,\s*(?<y>\d{1,2})\s*\)");
         private static readonly SceneDumper Dumper = DumpAsWavefrontObject;
 
         private static KeyedClientDatabase<int, LiquidTypeRecord> InitializeLiquidTypeDb()
