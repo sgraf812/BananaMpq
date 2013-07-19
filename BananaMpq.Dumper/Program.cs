@@ -98,6 +98,7 @@ namespace BananaMpq.Dumper
             // Now just dump them.
             using (var writer = new StreamWriter(stream))
             {
+                writer.WriteLine("o some_adt.obj");
                 foreach (var v in vertices)
                 {
                     writer.WriteLine("v {0} {1} {2}", v.X, v.Y, v.Z);
