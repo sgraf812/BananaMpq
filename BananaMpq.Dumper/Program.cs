@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using BananaMpq.Geometry;
@@ -96,7 +97,8 @@ namespace BananaMpq.Dumper
                 writer.WriteLine("o some_adt.obj");
                 foreach (var v in vertices)
                 {
-                    writer.WriteLine("v {0} {1} {2}", v.X, v.Y, v.Z);
+                    var nf = CultureInfo.InvariantCulture.NumberFormat;
+                    writer.WriteLine("v {0} {1} {2}", v.X.ToString(nf), v.Y.ToString(nf), v.Z.ToString(nf));
                 }
 
                 foreach (var t in triangles)
