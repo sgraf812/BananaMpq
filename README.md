@@ -18,4 +18,6 @@ Regarding MPQ file location:
 If you have WoW installed, you can use the code as is. As long as the proper registry keys are available (they are, if you started wow(-64).exe as admin at least once), it should just work.
 Otherwise you might want to flip the outcommenting in BananaMpq.Dumper/Program.cs:L20 and in BananaMpq.View/Infrastructure/SceneService.cs:L33
 
+Feel free to use this for whatever projects, it's MIT licensed. 
+
 GL, HF!
