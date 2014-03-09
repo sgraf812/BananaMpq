@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BananaMpq.Layer.Chunks;
 using BananaMpq.Layer.WmoRelated;
 using BananaMpq.Visualization;
 using SharpDX;
 
-namespace BananaMpq.Layer.Chunks
+namespace BananaMpq.Layer
 {
     public abstract class ModelDefinition : IHasVisualizableProperties, IModelDefinition
     {
@@ -19,10 +20,9 @@ namespace BananaMpq.Layer.Chunks
 
         public IEnumerable<IModelDefinition> FilterDoodadSetDefinitions(IList<DoodadSet> sets, IEnumerable<IModelDefinition> doodadDefs)
         {
-            var defs = DefinitionsForSet(doodadDefs, sets[0]);
-            return !ExtraDoodadSetIndex.HasValue
-                       ? defs
-                       : defs.Concat(DefinitionsForSet(doodadDefs, sets[ExtraDoodadSetIndex.Value]));
+            return !ExtraDoodadSetIndex.HasValue || ExtraDoodadSetIndex >= sets.Count
+                       ? DefinitionsForSet(doodadDefs, sets[0])
+                       : DefinitionsForSet(doodadDefs, sets[ExtraDoodadSetIndex.Value]);
         }
 
         private static IEnumerable<IModelDefinition> DefinitionsForSet(IEnumerable<IModelDefinition> defs, DoodadSet set)
@@ -49,5 +49,5 @@ namespace BananaMpq.Layer.Chunks
                 };
             }
         }
-    }
+    } 
 }

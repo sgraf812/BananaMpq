@@ -1,4 +1,4 @@
-﻿namespace BananaMpq.Geometry
+namespace BananaMpq.Geometry
 {
     public struct IndexedTriangle
     {

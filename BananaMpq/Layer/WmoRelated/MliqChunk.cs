@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using BananaMpq.Layer.Chunks;
 using SharpDX;
-using System.Linq;
 
 namespace BananaMpq.Layer.WmoRelated
 {

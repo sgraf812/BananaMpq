@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using BananaMpq.View.Infrastructure;
 using SharpDX;
-using Colors = System.Windows.Media.Colors;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace BananaMpq.View.Views

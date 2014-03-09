@@ -23,7 +23,7 @@ namespace BananaMpq.Layer
 
         public bool AdtExistsForTile(int x, int y)
         {
-            return (_main.Flags[y, x] & 1) != 0;
+            return x >= 0 && y >= 0 && x < 64 && y < 64 && (_main.Flags[y, x] & 1) != 0;
         }
 
         private unsafe Chunk CreateChunk(ChunkHeader* header)

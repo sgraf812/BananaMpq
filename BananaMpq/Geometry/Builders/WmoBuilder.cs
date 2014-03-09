@@ -10,7 +10,7 @@ namespace BananaMpq.Geometry.Builders
 {
     public class WmoBuilder : ModelBuilder
     {
-        private readonly ISet<int> _builtIds = new HashSet<int>();
+        private readonly ISet<int> _builtIds = new HashSet<int>(); 
         private readonly DoodadBuilder _doodadBuilder;
         private readonly Func<int, MaterialFlags> _getLiquidMaterial;
 
@@ -28,18 +28,18 @@ namespace BananaMpq.Geometry.Builders
             foreach (var definition in definitions)
             {
                 if (definition.Id != null && !_builtIds.Add(definition.Id.Value)) continue;
-                var wmo = Files.GetWmo(definition.GetModelReference(references));
+                var file = definition.GetModelReference(references);
+                var wmo = Files.GetWmo(file);
                 var transform = definition.GetTranform();
 
                 var doodadDefs = definition.FilterDoodadSetDefinitions(wmo.DoodadSets, wmo.DoodadDefinitions);
-                doodads = doodads.Concat(from d in _doodadBuilder.BuildDoodads(doodadDefs, wmo.DoodadReferences, bounds, transform)
-                                         select d);
+                doodads = doodads.Concat(_doodadBuilder.BuildDoodads(doodadDefs, wmo.DoodadReferences, bounds, transform));
 
                 groups = groups.Concat(from g in wmo.Groups
                                        let collisionTriangles =
                                            g.Triangles.Where((t, i) => (g.TriangleFlags[i] & MopyChunk.NoCollision) == 0)
                                        where collisionTriangles.Any()
-                                       select BuildModelFromTransform(g.Vertices, collisionTriangles, transform) into sceneObject
+                                       select BuildModelFromTransform(g.Vertices, collisionTriangles, transform, file) into sceneObject
                                        where bounds.Intersects(sceneObject.Bounds)
                                        select sceneObject);
 
@@ -50,9 +50,9 @@ namespace BananaMpq.Geometry.Builders
                                              MapChunk.TileSize, transform)
                                          let materialProperties = _getLiquidMaterial(g.DetermineLiquidType())
                                          select meshBuilder.BuildSquareMesh((c, r) => !l.ExistsTable[r, c], materialProperties, bounds)
-                                             into sceneObject
-                                             where sceneObject != null
-                                             select sceneObject);
+                                         into sceneObject
+                                         where sceneObject != null
+                                         select sceneObject);
             }
 
             return new WmoBuildResults

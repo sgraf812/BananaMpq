@@ -24,7 +24,8 @@ namespace BananaMpq.Layer.AdtRelated
                         entry->position.Y
                     ),
                     Rotation = entry->rotation,
-                    Scale = entry->scale / 1024.0f
+                    Scale = entry->scale / 1024.0f,
+                    Flags = entry->flags
                 });
             }
         }

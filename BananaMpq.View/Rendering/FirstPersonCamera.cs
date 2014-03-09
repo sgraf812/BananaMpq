@@ -1,6 +1,7 @@
-﻿using SharpDX;
+using BananaMpq.View.Infrastructure;
+using SharpDX;
 
-namespace BananaMpq.View.Infrastructure
+namespace BananaMpq.View.Rendering
 {
     public class FirstPersonCamera
     {

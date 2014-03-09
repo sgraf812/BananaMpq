@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Interop="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
-        xmlns:Views="clr-namespace:BananaMpq.View.Views" Title="MainWindow" Height="768"
+        xmlns:views="clr-namespace:BananaMpq.View.Views"
+        Title="MainWindow" Height="768"
         Width="1024">
     <Grid Background="#FF404040">
         <Grid.ColumnDefinitions>
@@ -14,13 +15,22 @@
                 <Interop:D3DImage x:Name="_imageSource" />
             </Image.Source>
         </Image>
-        <Button x:Name="_btnNew" Background="#80C0C0C0" Focusable="False" Content="_New" Margin="12,12,12,12" HorizontalAlignment="Left" Width="100" Height="40" VerticalAlignment="Top" />
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Background="Transparent" Width="Auto" Height="Auto" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button x:Name="_btnNew" Background="#80C0C0C0" Focusable="False" Content="_New" Margin="12,12,12,12" HorizontalAlignment="Left" Width="100" Height="40" VerticalAlignment="Top" />
+                <Button x:Name="_btnBuild" Background="#80C0C0C0" Focusable="False" Content="_Build" Margin="12,12,12,12" HorizontalAlignment="Left" Width="100" Height="40" VerticalAlignment="Top" />
+            </StackPanel>
+            <Label x:Name="_lblModelFile" Foreground="Turquoise"></Label>
+        </StackPanel>
         <TabControl Grid.Column="1" Background="{StaticResource HalfTransparentBrush}">
             <TabItem Header="Adt">
-                <Views:TreeChunkHierarchyView x:Name="_adtView" Background="{StaticResource HalfTransparentBrush}" />
+                <views:TreeChunkHierarchyView x:Name="_adtView" Background="{StaticResource HalfTransparentBrush}" />
             </TabItem>
             <TabItem Header="Wmos">
-                <Views:TreeChunkHierarchyView x:Name="_wmoView" Background="{StaticResource HalfTransparentBrush}" />
+                <views:TreeChunkHierarchyView x:Name="_wmoView" Background="{StaticResource HalfTransparentBrush}" />
+            </TabItem>
+            <TabItem Header="NavMesh">
+                <views:NavigationMeshSettingsView x:Name="_navMeshView" Background="{StaticResource HalfTransparentBrush}" />
             </TabItem>
         </TabControl>
     </Grid>

@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using BananaMpq.Layer.Chunks;
 
 namespace BananaMpq.Layer.WmoRelated
 {
     public class ModsChunk : Chunk
     {
-        internal unsafe ModsChunk(ChunkHeader* header) : base(header)
+        internal unsafe ModsChunk(ChunkHeader* header)
+            : base(header)
         {
-            ParseSets((Mods*)ChunkHeader.ChunkBegin(header), header->Size/sizeof(Mods));
+            ParseSets((Mods*)ChunkHeader.ChunkBegin(header), header->Size / sizeof(Mods));
         }
 
         private unsafe void ParseSets(Mods* set, int count)
@@ -35,7 +34,7 @@ namespace BananaMpq.Layer.WmoRelated
         private unsafe struct Mods
         {
             public const int NameLength = 20;
-            public fixed byte name [NameLength];
+            public fixed byte name[NameLength];
             public int firstInstanceIndex;
             public int instanceCount;
         }

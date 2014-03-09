@@ -11,11 +11,13 @@ namespace BananaMpq.Layer
 {
     public class Adt : IChunkCollector, IHasVisualizableProperties
     {
+        private static readonly BoundingBox Nothing = new BoundingBox(new Vector3(float.MaxValue), new Vector3(float.MinValue));
         private static readonly IList<IModelDefinition> EmptyDefinitions = new IModelDefinition[0];
         private static readonly IList<StringReference> EmptyReferences = new StringReference[0];
         public const int Version = 18;
         public const float AdtWidth = 1600.0f / 3.0f;
-        public const int McnksPerAdt = 256;
+        public const int McnksPerSide = 16;
+        public const int McnksPerAdt = McnksPerSide*McnksPerSide;
         private Mh2oChunk _mh2o;
         private int _mcnkCounter;
         private StringReferenceChunk _mmdx;
@@ -24,7 +26,7 @@ namespace BananaMpq.Layer
         private ModfChunk _modf;
         public int X { get; private set; }
         public int Y { get; private set; }
-        public RectangleF Bounds { get; private set; }
+        public BoundingBox Bounds { get; private set; }
         public IList<MapChunk> MapChunks { get; private set; }
         public IList<IModelDefinition> WmoDefinitions { get; private set; }
         public IList<StringReference> WmoReferences { get; private set; }
@@ -47,16 +49,19 @@ namespace BananaMpq.Layer
             var mid = MapChunks[120].Bounds.Minimum;
             X = (int)Math.Floor(32.0f - mid.Y / AdtWidth);
             Y = (int)Math.Floor(32.0f - mid.X / AdtWidth);
-            Bounds = new RectangleF
-            {
-                Left = (31 - Y)*AdtWidth,
-                Right = (32 - Y)*AdtWidth,
-                Bottom = (31 - X)*AdtWidth,
-                Top = (32 - X)*AdtWidth,
-            };
+            Bounds = RoundToAdtBounds(MapChunks.Aggregate(Nothing, (b, c) => BoundingBox.Merge(b, c.Bounds)));
             TrySetChunkLiquids();
             WmoDefinitions = DoodadDefinitions = EmptyDefinitions;
             WmoReferences = DoodadReferences = EmptyReferences;
+        }
+
+        private static BoundingBox RoundToAdtBounds(BoundingBox bounds)
+        {
+            bounds.Minimum.X = (float)(Math.Round(bounds.Minimum.X/AdtWidth)*AdtWidth);
+            bounds.Minimum.Y = (float)(Math.Round(bounds.Minimum.Y/AdtWidth)*AdtWidth);
+            bounds.Maximum.X = (float)(Math.Round(bounds.Maximum.X/AdtWidth)*AdtWidth);
+            bounds.Maximum.Y = (float)(Math.Round(bounds.Maximum.Y/AdtWidth)*AdtWidth);
+            return bounds;
         }
 
         private void TrySetChunkLiquids()

@@ -30,7 +30,20 @@ namespace BananaMpq
 
         public static bool Intersects(this RectangleF rect, BoundingBox box)
         {
-            return rect.Contains(box.Minimum) || rect.Contains(box.Maximum);
+            return !(box.Minimum.X > rect.Right || box.Maximum.X < rect.Left || box.Minimum.Y > rect.Top || box.Maximum.Y < rect.Bottom);
+        }
+
+        public static BoundingBox Union(this BoundingBox a, BoundingBox b)
+        {
+            var ret = new BoundingBox();
+            Vector3.Max(ref a.Minimum, ref b.Minimum, out ret.Minimum);
+            Vector3.Min(ref a.Maximum, ref b.Maximum, out ret.Maximum);
+            return ret;
+        }
+
+        public static int Clamp(int value, int min, int max)
+        {
+            return value < min ? min : value > max ? max : value;
         }
     }
 }

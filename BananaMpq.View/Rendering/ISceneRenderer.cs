@@ -1,6 +1,6 @@
 using BananaMpq.Geometry;
 
-namespace BananaMpq.View.Infrastructure
+namespace BananaMpq.View.Rendering
 {
     public interface ISceneRenderer
     {

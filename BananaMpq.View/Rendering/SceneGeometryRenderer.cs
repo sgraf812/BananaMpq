@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BananaMpq.Geometry;
 using SharpDX;
 using SharpDX.Direct3D9;
 
-namespace BananaMpq.View.Infrastructure
+namespace BananaMpq.View.Rendering
 {
     public class SceneGeometryRenderer : ISceneRenderer
     {
+        private readonly static Material _terrainMaterial = CreateColorMaterial(Color.Green);
+        private readonly static Material _waterMaterial = CreateColorMaterial(Color.Blue);
+        private readonly static Material _harmingLiquidMaterial = CreateColorMaterial(Color.Indigo);
+        private readonly static Material _doodadMaterial = CreateColorMaterial(Color.Red);
+        private readonly static Material _wmoMaterial = CreateColorMaterial(Color.Yellow);
         private readonly Device _device;
         private readonly IDictionary<SceneObject, IRenderBatch> _meshCache = new Dictionary<SceneObject, IRenderBatch>();
-        private readonly Material _terrainMaterial = CreateColorMaterial(Colors.Green);
-        private readonly Material _waterMaterial = CreateColorMaterial(Colors.Blue);
-        private readonly Material _harmingLiquidMaterial = CreateColorMaterial(Colors.Indigo);
-        private readonly Material _doodadMaterial = CreateColorMaterial(Colors.Red);
-        private readonly Material _wmoMaterial = CreateColorMaterial(Colors.Yellow);
 
         public SceneGeometryRenderer(Device device)
         {

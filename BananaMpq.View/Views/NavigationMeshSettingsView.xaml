@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="BananaMpq.View.Views.NavigationMeshSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:BananaMpq.View.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="779" d:DesignWidth="400">
+    <StackPanel>
+        <GroupBox Header="Renderers">
+            <StackPanel x:Name="_rendererPanel" />
+        </GroupBox>
+        <GroupBox Header="Configuration">
+            <StackPanel>
+                <GroupBox Header="Voxelization">
+                    <StackPanel>
+                        <views:BuildConfigGroup LabelText="Tiles per side:" x:Name="_tilesPerSide"
+                                      MinValue="1" MaxValue="16" 
+                                      CurrentValue="4" Step="1" />
+                        <views:BuildConfigGroup LabelText="Cells per tile side:" x:Name="_cellsPerTileSide"
+                                      MinValue="50" MaxValue="800" 
+                                      CurrentValue="400" Step="10" />
+                        <views:BuildConfigGroup LabelText="Agent radius:" x:Name="_agentRadius"
+                                      MinValue="0.0" MaxValue="2.0" 
+                                      CurrentValue="0.3" Step="0.1" />
+                        <views:BuildConfigGroup LabelText="Agent height:" x:Name="_agentHeight"
+                                      MinValue="0.0" MaxValue="3.0" 
+                                      CurrentValue="1.7" Step="0.1" />
+                        <views:BuildConfigGroup LabelText="Cells per agent height:" x:Name="_cellsPerAgentHeight"
+                                      MinValue="1" MaxValue="50" 
+                                      CurrentValue="20" Step="1" />
+                        <views:BuildConfigGroup LabelText="Walkable climb:" x:Name="_walkableClimb"
+                                      MinValue="0.0" MaxValue="5.0" 
+                                      CurrentValue="0.9" Step="0.1" />
+                        <views:BuildConfigGroup LabelText="Border size:" x:Name="_borderSize"
+                                      MinValue="0.0" MaxValue="50.0" 
+                                      CurrentValue="4.2" Step="0.1" />
+                        <views:BuildConfigGroup LabelText="Walkable slope:" x:Name="_walkableSlope"
+                                      MinValue="0.0" MaxValue="90.0" 
+                                      CurrentValue="50" Step="0.1" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Contours">
+                    <StackPanel>
+                        <views:BuildConfigGroup LabelText="Min region area:" x:Name="_minRegionArea"
+                                      MinValue="10.0" MaxValue="1000.0" 
+                                      CurrentValue="30.0" Step="5.0" />
+                        <views:BuildConfigGroup LabelText="Merge region area:" x:Name="_mergeRegionArea"
+                                      MinValue="10.0" MaxValue="1000.0" 
+                                      CurrentValue="50.0" Step="5.0" />
+                        <DockPanel>
+                            <Label Content="Tesselate solid edges:" />
+                            <CheckBox IsChecked="True" x:Name="_tesselateSolidEdges"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Tesselate edges between areas:" />
+                            <CheckBox IsChecked="False" x:Name="_tesselateEdgesBetweenAreas" />
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Max edge length:" />
+                            <TextBox IsReadOnly="True" IsEnabled="False" x:Name="_maxEdgeLength"/>
+                        </DockPanel>
+                        <views:BuildConfigGroup LabelText="Max edge deviation:" x:Name="_maxEdgeDeviation"
+                                      MinValue="0.0" MaxValue="10.0" 
+                                      CurrentValue="1.3" Step="0.1" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="PolyMesh">
+                    <StackPanel>
+                        <views:BuildConfigGroup LabelText="Max verts per poly:" x:Name="_vertsPerPoly"
+                                      MinValue="3" MaxValue="12" 
+                                      CurrentValue="6" Step="1" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="DetailMesh">
+                    <StackPanel>
+                        <views:BuildConfigGroup LabelText="Contour sample distance:" x:Name="_contourSampleDistance"
+                                      MinValue="0.0" MaxValue="100.0" 
+                                      CurrentValue="0" Step="0.1" />
+                        <views:BuildConfigGroup LabelText="Max Contour deviation:" x:Name="_maxContourDeviation"
+                                      MinValue="0.0" MaxValue="100.0" 
+                                      CurrentValue="6" Step="0.1" />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

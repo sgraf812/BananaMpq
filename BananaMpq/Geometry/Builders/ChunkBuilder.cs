@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BananaMpq.Layer;
 using BananaMpq.Layer.AdtRelated;
 using SharpDX;
-using System.Linq;
 
 namespace BananaMpq.Geometry.Builders
 {
     public class ChunkBuilder
     {
+        private const string DescriptionTemplate = "{0} ({1}, {2})";
         private readonly Func<int, MaterialFlags> _getLiquidMaterial;
 
         public ChunkBuilder(Func<int, MaterialFlags> getLiquidMaterial)
@@ -29,7 +30,8 @@ namespace BananaMpq.Geometry.Builders
                 var liquid = chunk.Liquid;
                 var meshBuilder = new SquareMeshBuilder(liquid.HeightMap, offset, -MapChunk.TileSize);
                 var materialProperties = _getLiquidMaterial(liquid.Type);
-                var sceneObject = meshBuilder.BuildSquareMesh((c, r) => !liquid.ExistsTable[r, c], materialProperties, bounds);
+                var description = string.Format(DescriptionTemplate, "Liquid", chunk.X, chunk.Y);
+                var sceneObject = meshBuilder.BuildSquareMesh(liquid.HasHole, materialProperties, bounds, description);
                 if (sceneObject != null) yield return sceneObject;
             }
         }
@@ -41,7 +43,8 @@ namespace BananaMpq.Geometry.Builders
                 var offset = chunk.Bounds.Maximum;
                 offset.Z = chunk.Bounds.Minimum.Z;
                 var meshBuilder = new SquareMeshBuilder(chunk.HeightMap, offset, -MapChunk.TileSize);
-                var sceneObject = meshBuilder.BuildSquareMesh(chunk.HasHole, MaterialFlags.None, bounds);
+                var description = string.Format(DescriptionTemplate, "Terrain", chunk.X, chunk.Y);
+                var sceneObject = meshBuilder.BuildSquareMesh(chunk.HasHole, MaterialFlags.None, bounds, description);
                 if (sceneObject != null) yield return sceneObject;
             }
         }

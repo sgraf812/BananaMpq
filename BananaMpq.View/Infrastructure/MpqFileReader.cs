@@ -8,15 +8,18 @@ namespace BananaMpq.View.Infrastructure
 {
     public class MpqFileReader : IFileReader
     {
-        private static readonly WoWInstallation Installation = WoWInstallation.Find();
         private readonly WoWMpqFileSystem _fileSystem;
 
-        public MpqFileReader()
+        public MpqFileReader() : this(WoWInstallation.Find())
         {
-            var languagePack = Installation.LanguagePacks.FirstOrDefault(l => l.Culture.Equals(CultureInfo.CurrentUICulture))
-                ?? Installation.LanguagePacks.FirstOrDefault(l => l.Culture.Name == "en-GB")
-                ?? Installation.LanguagePacks.First(); 
-            _fileSystem = Installation.CreateFileSystem(languagePack, false);
+        }
+
+        public MpqFileReader(WoWInstallation installation)
+        {
+            var languagePack = installation.LanguagePacks.FirstOrDefault(l => l.Culture.Equals(CultureInfo.CurrentUICulture))
+                ?? installation.LanguagePacks.FirstOrDefault(l => l.Culture.Name == "en-GB")
+                ?? installation.LanguagePacks.First();
+            _fileSystem = installation.CreateFileSystem(languagePack, false);
         }
 
         #region Implementation of IFileReader

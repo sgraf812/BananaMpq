@@ -7,5 +7,6 @@ namespace BananaMpq.Geometry
         public BoundingBox Bounds { get; set; }
         public MaterialFlags MaterialProperties { get; set; }
         public TriangleMesh Geometry { get; set; }
+        public string Description { get; set; }
     }
 }

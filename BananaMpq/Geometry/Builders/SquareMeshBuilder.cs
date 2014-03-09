@@ -51,7 +51,7 @@ namespace BananaMpq.Geometry.Builders
             return IndexedTriangleWithNormal.CreateFromVertices(a, b, c, _vertices);
         }
 
-        public SceneObject BuildSquareMesh(Func<int, int, bool> shouldNotRenderTile, MaterialFlags materialProperties, RectangleF bounds)
+        public SceneObject BuildSquareMesh(Func<int, int, bool> shouldNotRenderTile, MaterialFlags materialProperties, RectangleF bounds, string description = null)
         {
             var trianglesPerRow = MaxTileRows;
             var trianglesPerCol = MaxTileColumns;
@@ -93,7 +93,8 @@ namespace BananaMpq.Geometry.Builders
                 {
                     Vertices = vertices,
                     Triangles = triangles.ToArray()
-                }
+                },
+                Description = description
             };
         }
 

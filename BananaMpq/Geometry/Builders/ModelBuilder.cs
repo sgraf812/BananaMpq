@@ -13,7 +13,7 @@ namespace BananaMpq.Geometry.Builders
             Files = files;
         }
 
-        protected static SceneObject BuildModelFromTransform(IEnumerable<Vector3> vertices, IEnumerable<IndexedTriangle> triangles, Matrix transform)
+        protected static SceneObject BuildModelFromTransform(IEnumerable<Vector3> vertices, IEnumerable<IndexedTriangle> triangles, Matrix transform, string modelFile)
         {
             var transformedVertices = vertices.Transform(transform).ToArray();
 
@@ -24,7 +24,8 @@ namespace BananaMpq.Geometry.Builders
                 {
                     Vertices = transformedVertices,
                     Triangles = triangles.Select(t => IndexedTriangleWithNormal.CreateFromVertices(t, transformedVertices)).ToArray()
-                }
+                },
+                Description = modelFile
             };
         }
     }

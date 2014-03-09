@@ -1,7 +1,7 @@
-﻿using SharpDX;
+using SharpDX;
 using SharpDX.Direct3D9;
 
-namespace BananaMpq.View.Infrastructure
+namespace BananaMpq.View.Rendering
 {
     public struct VertexPositionNormal
     {

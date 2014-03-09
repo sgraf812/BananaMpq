@@ -6,5 +6,7 @@ namespace BananaMpq
         EasternKingdoms,
         Outlands,
         Northrend,
+        Pandaria,
+        GoldRushBG,
     }
 }

@@ -24,7 +24,7 @@ namespace BananaMpq.Geometry.Builders
                 var transform = definition.GetTranform();
                 if (rootTransform.HasValue) transform = transform * rootTransform.Value;
 
-                var sceneObject = BuildModelFromTransform(doodad.Vertices, doodad.Triangles, transform);
+                var sceneObject = BuildModelFromTransform(doodad.Vertices, doodad.Triangles, transform, definition.GetModelReference(references));
                 if (bounds.Intersects(sceneObject.Bounds)) yield return sceneObject;
             }
         }

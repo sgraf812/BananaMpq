@@ -8,6 +8,7 @@ using BananaMpq.Geometry.Builders;
 using BananaMpq.Layer.WmoRelated;
 using BananaMpq.View.Infrastructure;
 using CrystalMpq.DataFormats;
+using CrystalMpq.WoW;
 using SharpDX;
 
 namespace BananaMpq.Dumper
@@ -16,7 +17,8 @@ namespace BananaMpq.Dumper
 
     class Program
     {
-        private static readonly MpqFileReader FileReader = new MpqFileReader();
+        private static readonly MpqFileReader FileReader = new MpqFileReader(WoWInstallation.Find()); // infers installation location from registry
+        //private static readonly MpqFileReader FileReader = new MpqFileReader(WoWInstallation.AssumeAt("Z:\\World of Warcraft"));
         private static readonly FilePool Files = new FilePool(FileReader);
         private static readonly AdtGeometryBuilder Builder = new AdtGeometryBuilder(Files, MapLiquidType);
         private static readonly KeyedClientDatabase<int, LiquidTypeRecord> LiquidTypeDatabase = InitializeLiquidTypeDb();
@@ -53,7 +55,7 @@ namespace BananaMpq.Dumper
             }
             var x = int.Parse(args[1]);
             var y = int.Parse(args[2]);
-            var scene = Builder.BuildTile(cont, x, y);
+            var scene = Builder.BuildTile(MpqFilePaths.MapToInternalName(cont), x, y);
 
             Dumper(scene, Console.OpenStandardOutput(65536));
         }
@@ -62,7 +64,7 @@ namespace BananaMpq.Dumper
         {
             Console.WriteLine("Usage: BananaMpq.Dumper.exe continent x y");
             Console.WriteLine("       This will dump the whole adt to stdout. Pipe/redirect as you want to.");
-            Console.WriteLine("       Example: BananaMpq.Dumper.exe EasternKingdoms 30 48 > \"EK(30, 48\").obj");
+            Console.WriteLine("       Example: BananaMpq.Dumper.exe EasternKingdoms 30 48 > \"EK(30, 48).obj\"");
         }
 
         private static void DumpAsWavefrontObject(Scene scene, Stream stream)

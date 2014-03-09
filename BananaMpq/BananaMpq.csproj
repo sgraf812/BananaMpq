@@ -35,22 +35,37 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpDX, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SharpDX.dll</HintPath>
+    <Reference Include="SharpDX">
+      <HintPath>..\packages\SharpDX.2.4.2\lib\net40\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ArrayUtil.cs" />
     <Compile Include="Geometry\Builders\AdtGeometryBuilder.cs" />
     <Compile Include="Geometry\Builders\ChunkBuilder.cs" />
@@ -59,14 +74,19 @@
     <Compile Include="Geometry\Builders\SquareMeshBuilder.cs" />
     <Compile Include="Geometry\Builders\WmoBuilder.cs" />
     <Compile Include="Geometry\Builders\WmoBuildResults.cs" />
-    <Compile Include="Geometry\MaterialFlags.cs" />
-    <Compile Include="Geometry\TriangleMesh.cs" />
+    <Compile Include="Geometry\BVHNode.cs" />
+    <Compile Include="Geometry\BVHTree.cs" />
+    <Compile Include="Geometry\IBVHNode.cs" />
+    <Compile Include="Geometry\IBVHTree.cs" />
     <Compile Include="Geometry\IFileReader.cs" />
+    <Compile Include="Geometry\FilePool.cs" />
     <Compile Include="Geometry\IndexedTriangle.cs" />
     <Compile Include="Geometry\IndexedTriangleWithNormal.cs" />
-    <Compile Include="Geometry\FilePool.cs" />
+    <Compile Include="Geometry\MaterialFlags.cs" />
     <Compile Include="Geometry\Scene.cs" />
     <Compile Include="Geometry\SceneObject.cs" />
+    <Compile Include="Geometry\TriangleMesh.cs" />
+    <Compile Include="Geometry\TriangleWithNormal.cs" />
     <Compile Include="Layer\Adt.cs" />
     <Compile Include="Layer\AdtRelated\AdtVersionException.cs" />
     <Compile Include="Layer\AdtRelated\ChunkLiquid.cs" />
@@ -84,13 +104,13 @@
     <Compile Include="Layer\Chunks\ChunkMagicException.cs" />
     <Compile Include="Layer\Chunks\ChunkValidationException.cs" />
     <Compile Include="Layer\Chunks\IModelDefinition.cs" />
-    <Compile Include="Layer\Chunks\ModelDefinition.cs" />
     <Compile Include="Layer\Chunks\ModelDefinitionChunk.cs" />
     <Compile Include="Layer\Chunks\MverChunk.cs" />
     <Compile Include="Layer\Chunks\OffsetChunk.cs" />
     <Compile Include="Layer\Chunks\StringReference.cs" />
     <Compile Include="Layer\Chunks\StringReferenceChunk.cs" />
     <Compile Include="Layer\M2Bounds.cs" />
+    <Compile Include="Layer\ModelDefinition.cs" />
     <Compile Include="Layer\WdtRelated\MainChunk.cs" />
     <Compile Include="Layer\WdtRelated\MphdChunk.cs" />
     <Compile Include="Layer\Wmo.cs" />
@@ -118,6 +138,9 @@
     <Compile Include="WowContinent.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

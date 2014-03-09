@@ -34,7 +34,7 @@ namespace BananaMpq.View.Presenters
         private void LoadNewWdtMap(object sender, EventArgs e)
         {
             var view = (ITileSelectionView)sender;
-            var wdt = _service.Files.GetWdt(view.Continent);
+            var wdt = _service.Files.GetWdt(MpqFilePaths.MapToInternalName(view.Continent));
             var tileCoordinates = (from x in WdtCoordinateRange
                                    from y in WdtCoordinateRange
                                    where wdt.AdtExistsForTile(x, y)

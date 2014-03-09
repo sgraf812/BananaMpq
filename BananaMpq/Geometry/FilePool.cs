@@ -12,20 +12,20 @@ namespace BananaMpq.Geometry
         private readonly IDictionary<string, M2Bounds> _doodadCache = new Dictionary<string, M2Bounds>();
         private readonly IDictionary<string, Wmo> _wmoCache = new Dictionary<string, Wmo>();
         private readonly IDictionary<Tuple<string, int>, WmoGroup> _groupCache = new Dictionary<Tuple<string, int>, WmoGroup>();
-        private readonly IDictionary<Tuple<WowContinent, int, int>, Adt> _adtCache = new Dictionary<Tuple<WowContinent, int, int>, Adt>();
-        private readonly IDictionary<WowContinent, Wdt> _wdtCache = new Dictionary<WowContinent, Wdt>();
+        private readonly IDictionary<Tuple<string, int, int>, Adt> _adtCache = new Dictionary<Tuple<string, int, int>, Adt>();
+        private readonly IDictionary<string, Wdt> _wdtCache = new Dictionary<string, Wdt>();
 
         public FilePool(IFileReader reader)
         {
             _reader = reader;
         }
 
-        public Wdt GetWdt(WowContinent continent)
+        public Wdt GetWdt(string continent)
         {
             return TryGetOrCreate(_wdtCache, continent, c => new Wdt(_reader.Read(MpqFilePaths.GetWdtFileName(c))));
         }
 
-        public Adt GetAdt(WowContinent continent, int x, int y)
+        public Adt GetAdt(string continent, int x, int y)
         {
             return TryGetOrCreate(_adtCache, Tuple.Create(continent, x, y), t =>
             {

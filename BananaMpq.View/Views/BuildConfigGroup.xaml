@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="BananaMpq.View.Views.BuildConfigGroup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Views="clr-namespace:BananaMpq.View.Views"
+             mc:Ignorable="d" d:DesignWidth="203" d:DesignHeight="28">
+    <DockPanel>
+        <Label x:Name="_label" DockPanel.Dock="Left"
+               Content="{Binding Path=LabelText, RelativeSource={RelativeSource AncestorType={x:Type Views:BuildConfigGroup}}}"/>
+        <Label Content="{Binding Path=Value, ElementName=_value}" ContentStringFormat="F1" />
+        <Slider x:Name="_value" IsSnapToTickEnabled="True"
+                Minimum="{Binding Path=MinValue, RelativeSource={RelativeSource AncestorType={x:Type Views:BuildConfigGroup}}}"
+                Value="{Binding Path=CurrentValue, RelativeSource={RelativeSource AncestorType={x:Type Views:BuildConfigGroup}}}"
+                Maximum="{Binding Path=MaxValue, RelativeSource={RelativeSource AncestorType={x:Type Views:BuildConfigGroup}}}"
+                SmallChange="{Binding Path=Step, RelativeSource={RelativeSource AncestorType={x:Type Views:BuildConfigGroup}}}"
+                TickFrequency="{Binding Path=Step, RelativeSource={RelativeSource AncestorType={x:Type Views:BuildConfigGroup}}}" />
+    </DockPanel>
+</UserControl>

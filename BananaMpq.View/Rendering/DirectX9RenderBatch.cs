@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D9;
 
-namespace BananaMpq.View.Infrastructure
+namespace BananaMpq.View.Rendering
 {
     public class DirectX9RenderBatch : IRenderBatch
     {
@@ -14,6 +14,7 @@ namespace BananaMpq.View.Infrastructure
         private int _vertexCount;
         private int _indexCount;
         private int _stride;
+        private VertexFormat _vertexFormat;
 
         public DirectX9RenderBatch(Device device, PrimitiveType primiteType)
         {
@@ -31,6 +32,21 @@ namespace BananaMpq.View.Infrastructure
             RecordVertices(vertices);
         }
 
+        public void Record<TIndex>(TIndex[] indices, IRenderBatch useVerticesFrom) where TIndex : struct
+        {
+            RecordIndices(indices);
+            InitializeVerticesFrom(useVerticesFrom);
+        }
+
+        private void InitializeVerticesFrom(IRenderBatch useVerticesFrom)
+        {
+            var asDirectX9Batch = (DirectX9RenderBatch)useVerticesFrom;
+            _vertices = asDirectX9Batch._vertices;
+            _vertexCount = asDirectX9Batch._vertexCount;
+            _vertexFormat = asDirectX9Batch._vertexFormat;
+            _stride = asDirectX9Batch._stride;
+        }
+
         private void RecordVertices<TVertex>(TVertex[] vertices) where TVertex : struct
         {
             var size = InitializeVertexBuffer(vertices);
@@ -46,8 +62,8 @@ namespace BananaMpq.View.Infrastructure
             _stride = Marshal.SizeOf(vertexType);
             _vertexCount = vertices.Count;
             var size = _stride*_vertexCount;
-            var vertexFormat = (VertexFormat)vertexType.GetField("Format").GetValue(null);
-            _vertices = new VertexBuffer(_device, size, Usage.WriteOnly, vertexFormat, Pool.Default);
+            _vertexFormat = (VertexFormat)vertexType.GetField("Format").GetValue(null);
+            _vertices = new VertexBuffer(_device, size, Usage.WriteOnly, _vertexFormat, Pool.Default);
             return size;
         }
 
@@ -84,9 +100,12 @@ namespace BananaMpq.View.Infrastructure
 
         public void Render()
         {
+            var oldFormat = _device.VertexFormat;
+            _device.VertexFormat = _vertexFormat;
             _device.Indices = _indices;
             _device.SetStreamSource(0, _vertices, 0, _stride);
             _device.DrawIndexedPrimitive(_primiteType, 0, 0, _vertexCount, 0, PrimitiveCount);
+            _device.VertexFormat = oldFormat;
         }
 
         private int PrimitiveCount

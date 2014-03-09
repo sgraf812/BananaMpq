@@ -11,6 +11,7 @@ namespace BananaMpq.Layer.AdtRelated
     {
         public int ReferenceIndex { get; set; }
         public Vector3 Rotation { get; set; }
+        public short Flags { get; set; }
 
         protected override Matrix RotationMatrix
         {
@@ -30,7 +31,7 @@ namespace BananaMpq.Layer.AdtRelated
 
         private static float ToRadians(float degree)
         {
-            return (float)(degree * Math.PI / 180.0);
+            return (float)(degree*Math.PI/180.0);
         }
 
         #region Implementation of IHasVisualizableProperties

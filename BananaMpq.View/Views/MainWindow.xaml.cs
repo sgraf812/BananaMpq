@@ -36,12 +36,46 @@ namespace BananaMpq.View.Views
             Loaded += InitializeScene;
             KeyUp += (sender, args) => _chassis.HandleKey(args);
             KeyDown += (sender, args) => _chassis.HandleKey(args);
+            KeyUp += HandleVKey;
             MouseMove += OnMouseMove;
+            MouseDown += HandleMiddleButton;
             MouseRightButtonDown += OnRightButtonDown;
             MouseRightButtonUp += OnRightButtonUp;
+            MouseLeftButtonDown += OnLeftButtonDown;
+            _scenePresenter.NewNavigationMeshRenderers += (s, e) => _navMeshView.HandleNewNavigationMeshRenderers(e.NavMeshRenderers);
             _image.SizeChanged += (sender, args) => _scenePresenter.Resize((int)args.NewSize.Width, (int)args.NewSize.Height);
             
             _btnNew.Click += (sender, args) => OpenTileSelectionDialog();
+            if (PluginLoader.PluginExists)
+            {
+                _btnBuild.Click += (sender, args) => _navMeshView.BuildNavMesh();
+            }
+            else
+            {
+                _btnBuild.IsEnabled = false;
+            }
+        }
+
+        private void OnLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _scenePresenter.UpdateAgent(e.GetPosition(_image),
+                !Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift));
+        }
+
+        private void HandleVKey(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.V && e.IsUp)
+            {
+                _scenePresenter.ToggleGeometryVisibility();
+            }
+        }
+
+        private void HandleMiddleButton(object sender, MouseButtonEventArgs e)
+        {
+            if (e.MiddleButton == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Middle)
+            {
+                _scenePresenter.ToggleGeometryVisibility();
+            }
         }
 
         private void RenderScene(object sender, EventArgs args)
@@ -80,9 +114,16 @@ namespace BananaMpq.View.Views
                     _chassis.HandleInputDelta(delta);
                 }
             }
+            else if (args.LeftButton == MouseButtonState.Pressed)
+            {
+                _scenePresenter.UpdateAgent(args.GetPosition(_image),
+                    !Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift));
+            }
             else
             {
                 Infrastructure.Cursor.Show = true;
+                var modelFile = _scenePresenter.GetModelFileUnderCursor(args.GetPosition(_image));
+                _lblModelFile.Content = modelFile;
             }
         }
 

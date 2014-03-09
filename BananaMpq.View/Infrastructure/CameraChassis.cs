@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
-using SharpDX;
 using System.Windows.Input;
+using SharpDX;
 
 namespace BananaMpq.View.Infrastructure
 {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,11 +13,13 @@ namespace BananaMpq.Layer.AdtRelated
         public const float ChunkWidth = Adt.AdtWidth / 16.0f;
         public const int TilesPerChunk = 8;
         public const float TileSize = ChunkWidth / TilesPerChunk;
+        private static readonly byte[] NoHoles = Enumerable.Repeat((byte)0, 8).ToArray();
         public float[,] HeightMap { get; private set; }
-        public uint Flags { get; private set; }
-        public uint Holes { get; private set; }
+        public bool HasHighResHoles { get { return _flags.HasFlag(McnkHeaderFlags.HighResHoleMap); } }
+        public byte[] Holes { get; private set; }
         public int X { get; private set; }
         public int Y { get; private set; }
+        private McnkHeaderFlags _flags;
         private BoundingBox _bounds;
         public BoundingBox Bounds
         {
@@ -40,8 +43,7 @@ namespace BananaMpq.Layer.AdtRelated
 
         public bool HasHole(int col, int row)
         {
-            var holeIndex = (row / 2) * 4 + col / 2;
-            return Holes != 0 && ((Holes >> holeIndex) & 1) == 1;
+            return Holes != NoHoles && ((Holes[row] >> col) & 1) == 1;
         }
 
         private unsafe void ParseMcnkHeader(byte* cur)
@@ -53,10 +55,28 @@ namespace BananaMpq.Layer.AdtRelated
                 mcnk->Position
             );
 
-            Holes = mcnk->Holes;
-            Flags = mcnk->Flags;
+            _flags = mcnk->Flags;
+            Holes = _flags.HasFlag(McnkHeaderFlags.HighResHoleMap) ? mcnk->HighResHoles : TransformToHighRes(mcnk->Holes);
+            if (Holes.All(b => b == 0))
+                Holes = NoHoles; // easier to check for
+
             X = mcnk->X;
             Y = mcnk->Y;
+        }
+
+        private static byte[] TransformToHighRes(ushort holes)
+        {
+            var ret = new byte[8];
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    int holeIdxL = (i/2)*4 + (j/2);
+                    if (((holes >> holeIdxL) & 1) == 1)
+                        ret[i] |= (byte)(1 << j);
+                }
+            }
+            return ret;
         }
 
         private unsafe Chunk CreateChunks(ChunkHeader* header)
@@ -95,16 +115,22 @@ namespace BananaMpq.Layer.AdtRelated
 
         #endregion
 
+        [Flags]
+        private enum McnkHeaderFlags : uint
+        {
+            HighResHoleMap = 0x10000
+        }
+
 #pragma warning disable 169, 649
         private struct McnkHeader
         {
-            public uint Flags;
+            public McnkHeaderFlags Flags;
             public int X;
             public int Y;
             int nLayers;
             int nDoodadRefs;
-            int offMcvt;
-            int offMcnr;
+            uint offMcvt; // 0x14
+            uint offMcnr; // 0x18
             int offMcly;
             int offMcrf;
             int offMcal;
@@ -113,7 +139,8 @@ namespace BananaMpq.Layer.AdtRelated
             int sizeShadow;
             int areaId;
             int nMapObjRefs;
-            public uint Holes;
+            public ushort Holes;
+            ushort HolesAlign;
             unsafe fixed short lowQualityTexturingMap [8];
             int predTex;
             int noEffectDoodad;
@@ -123,7 +150,8 @@ namespace BananaMpq.Layer.AdtRelated
             int sizeLiquid;
             public Vector3 Position;
             int offMccv;
-            unsafe fixed int pad [2];
+            unsafe fixed int pad[2];
+            public byte[] HighResHoles { get { return BitConverter.GetBytes(offMcvt + ((ulong)offMcnr << 32)); } } // 0x14
         }
 #pragma warning restore 169, 649
 
@@ -137,7 +165,7 @@ namespace BananaMpq.Layer.AdtRelated
                     type.GetProperty("Bounds"),
                     type.GetProperty("X"),
                     type.GetProperty("Y"),
-                    type.GetProperty("Flags"),
+                    type.GetProperty("HasHighResHoles"),
                     type.GetProperty("Holes"),
                     type.GetProperty("HeightMap"),
                     type.GetProperty("DoodadReferences"),

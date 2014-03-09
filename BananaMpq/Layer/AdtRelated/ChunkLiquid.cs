@@ -49,6 +49,11 @@ namespace BananaMpq.Layer.AdtRelated
             }
         }
 
+        public bool HasHole(int col, int row)
+        {
+            return !ExistsTable[row, col];
+        }
+
         private unsafe void ParseHeightMap(byte* mh2oChunk, SMLiquidInstance* instance)
         {
             if (HasHeightMapData(instance) && UseExistsTable(instance->liquidObjectId, instance->liquidType))
@@ -70,7 +75,7 @@ namespace BananaMpq.Layer.AdtRelated
             }
         }
 
-        public static bool UseExistsTable(short liquidObjectId, short liquidType)
+        private static bool UseExistsTable(short liquidObjectId, short liquidType)
         {
             return !IsOcean(liquidObjectId, liquidType) && IsHeightMapDataFilling(liquidObjectId, liquidType);
         }
